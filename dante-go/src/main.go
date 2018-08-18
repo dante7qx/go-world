@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"errors"
 	"./_struct"
 	"./_pointer"
 	"./interfaces"
@@ -15,7 +16,18 @@ func main() {
 	//pointerTest()
 
 	// 接口测试
-	interfaceTest()
+	//interfaceTest()
+
+	// 错误处理
+	//errTest(9, 3)
+
+	// 数组和切片
+	//arrTest()
+	//sliceTest()
+
+	// map
+	mapTest()
+
 }
 
 /**
@@ -53,4 +65,81 @@ func interfaceTest()  {
 	phone.Set("IPhone 8", "美国")
 	str := phone.Call("13932014370")
 	fmt.Println(str)
+}
+
+/**
+	错误接口，参考：https://blog.csdn.net/tennysonsky/article/details/78946265
+		1. error接口，它是Go语言内建的接口类型
+		2. panic
+		3. recover
+ */
+func errTest(a, b float64)  {
+	result, err := divide(a, b)
+	if err != nil {
+		fmt.Println(result, err)
+	} else {
+		fmt.Println(result)
+	}
+}
+
+func divide(a, b float64) (result float64, err error) {
+	if b == 0 {
+		result = 0.0
+		err = errors.New("运行时错误：除数不能是0.")
+		return
+	}
+	result = a / b
+	err = nil
+	return
+}
+
+/**
+	数组和切片Slice(无界数组)
+ */
+func arrTest()  {
+	var strArr [3]string = [3]string{"Docker","k8s","OpenShift"}
+	for i, str := range strArr {
+		fmt.Println(i, str)
+	}
+}
+
+func sliceTest()  {
+	var sliceList = make([]string, 0, 6)
+	sliceList = append(sliceList, "竹", "尘", "水", "玉")
+
+	i := 0
+	for ; ;  {
+		if i >= len(sliceList) {
+			break
+		}
+		fmt.Println(i, sliceList[i])
+		i++
+	}
+	fmt.Println("sliceList len", len(sliceList), "cap", cap(sliceList))
+
+	var sublist = sliceList[2:]
+	fmt.Println(sublist)
+
+	var copylist []string = make([]string, 4, 6)
+	copy(copylist, sliceList)
+	fmt.Println(copylist)
+}
+
+/**
+	Map
+		1. var map_variable map[key_data_type]value_data_type
+		2. map_variable := make(map[key_data_type]value_data_type)
+ */
+func mapTest() {
+	maps := map[string]string {"Java": "爪哇", "Pythob": "蟒蛇🐍", "Gradle": "大象🐘"}
+	for k, v := range maps {
+		fmt.Println(k, v)
+	}
+
+	val, ok := maps ["Java"]
+	if ok {
+		fmt.Println("中文 ->", val)
+	} else {
+		fmt.Println("没有收录 Java")
+	}
 }
