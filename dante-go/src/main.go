@@ -6,6 +6,7 @@ import (
 	"./_struct"
 	"./_pointer"
 	"./interfaces"
+	"restful"
 )
 
 func main() {
@@ -26,8 +27,11 @@ func main() {
 	//sliceTest()
 
 	// map
-	mapTest()
+	//mapTest()
 
+
+	// Http 请求
+	restTest()
 }
 
 /**
@@ -136,10 +140,17 @@ func mapTest() {
 		fmt.Println(k, v)
 	}
 
-	val, ok := maps ["Java"]
+	val, ok := maps ["Java1"]
 	if ok {
 		fmt.Println("中文 ->", val)
 	} else {
 		fmt.Println("没有收录 Java")
+	}
+}
+
+func restTest() {
+	result, err := restful.DoGet("https://api.github.com/users/v")
+	if err == nil {
+		fmt.Println(result)
 	}
 }
