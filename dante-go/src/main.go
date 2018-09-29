@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"errors"
-	"./_struct"
-	"./_pointer"
-	"./interfaces"
+	"_struct"
+	"_pointer"
+	"interfaces"
 	"restful"
+	"_reflect"
 )
 
 func main() {
@@ -31,8 +32,12 @@ func main() {
 
 
 	// Http 请求
-	restTest()
+	//restTest()
+
+	// 反射测试
+	reflectTest()
 }
+
 
 /**
 	结构体测试
@@ -152,5 +157,14 @@ func restTest() {
 	result, err := restful.DoGet("https://api.github.com/users/v")
 	if err == nil {
 		fmt.Println(result)
+	} else {
+		fmt.Println(err)
 	}
+}
+
+func reflectTest() {
+	usr := _reflect.User{1001, "但丁", 34}
+	returnMsg := usr.Say("Go 还不错！")
+	fmt.Println(returnMsg)
+	_reflect.Info(usr)
 }

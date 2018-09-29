@@ -4,9 +4,10 @@ import (
 	"net/http"
 		"log"
 		"io/ioutil"
+	"encoding/json"
 )
 
-func DoGet(url string)  (r string, e error) {
+func DoGet(url string)  (r GithubUser, e error) {
 	resp, err := http.Get(url)
 	result := ""
 	if resp != nil {
@@ -21,5 +22,7 @@ func DoGet(url string)  (r string, e error) {
 	} else {
 		log.Fatal(err)
 	}
-	return result, err
+	var gusr GithubUser
+	json.Unmarshal([]byte(result), &gusr)
+	return gusr, err
 }
