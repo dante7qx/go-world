@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"errors"
 	"_struct"
-	"_pointer"
-	"interfaces"
+		"interfaces"
 	"restful"
 	"_reflect"
+	"concurrencys"
+	"_pointer"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 	//structTest()
 
 	// 指针
-	//pointerTest()
+	pointerTest()
 
 	// 接口测试
 	//interfaceTest()
@@ -35,7 +36,10 @@ func main() {
 	//restTest()
 
 	// 反射测试
-	reflectTest()
+	//reflectTest()
+
+	// 并发测试
+	//concurrencyTest()
 }
 
 
@@ -57,11 +61,18 @@ func pointerTest() {
 	//_pointer.BasicPinter()
 
 	// 结构体类型指针
-	obj := _pointer.Obj{}
-	obj.Set("我是一个结构体")
-	//obj.Name = "I am a struct"
+	obj := _pointer.Obj{Name: "结构体"}
+	sVal := obj.Set("我是一个结构体")
 	objName := _pointer.GetObjName(obj)
-	fmt.Println(objName, obj)
+	fmt.Println(sVal, objName, obj)
+
+	// 引用传递和值传递
+	//obj := _pointer.Obj{Name: "我有一个新名字"}
+	//_pointer.PointerPass(&obj)
+	//fmt.Println(obj)
+	//obj2 := _pointer.Obj{Name: "我有一个新名字"}
+	//_pointer.ValPass(obj2)
+	//fmt.Println(obj2)
 }
 
 /**
@@ -106,7 +117,7 @@ func divide(a, b float64) (result float64, err error) {
 	数组和切片Slice(无界数组)
  */
 func arrTest()  {
-	var strArr [3]string = [3]string{"Docker","k8s","OpenShift"}
+	var strArr [5]string = [5]string{"Docker", "k8s", "OpenShift", "Istio", "FaaS"}
 	for i, str := range strArr {
 		fmt.Println(i, str)
 	}
@@ -154,7 +165,7 @@ func mapTest() {
 }
 
 func restTest() {
-	result, err := restful.DoGet("https://api.github.com/users/v")
+	result, err := restful.DoGet("https://api.github.com/users/dante7qx")
 	if err == nil {
 		fmt.Println(result)
 	} else {
@@ -164,7 +175,12 @@ func restTest() {
 
 func reflectTest() {
 	usr := _reflect.User{1001, "但丁", 34}
-	returnMsg := usr.Say("Go 还不错！")
-	fmt.Println(returnMsg)
 	_reflect.Info(usr)
+
+	manager := _reflect.Manager{User: _reflect.User{1002, "尤娜", 26}, Title: "CEO"}
+	_reflect.Info2(&manager)
+}
+
+func concurrencyTest() {
+	concurrencys.Count(20)
 }
