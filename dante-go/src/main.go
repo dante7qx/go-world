@@ -9,6 +9,9 @@ import (
 	"_reflect"
 	"concurrencys"
 	"_pointer"
+	"_db"
+	"_json"
+	"_file"
 )
 
 func main() {
@@ -16,7 +19,7 @@ func main() {
 	//structTest()
 
 	// 指针
-	pointerTest()
+	//pointerTest()
 
 	// 接口测试
 	//interfaceTest()
@@ -31,7 +34,6 @@ func main() {
 	// map
 	//mapTest()
 
-
 	// Http 请求
 	//restTest()
 
@@ -40,6 +42,18 @@ func main() {
 
 	// 并发测试
 	//concurrencyTest()
+
+	// 数据库测试
+	//mysqlTest()
+
+	// web 测试
+	//_web.StartWebServer(9101)
+
+	// json 测试
+	//jsonTest()git
+
+	// 文件操作测试
+	//fileTest()
 }
 
 
@@ -183,4 +197,25 @@ func reflectTest() {
 
 func concurrencyTest() {
 	concurrencys.Count(20)
+}
+
+func mysqlTest() {
+	_db.MysqlDB("localhost", "springboot", "root", "iamdante", 3306)
+}
+
+func jsonTest() {
+	// json to object
+	serverList := _json.JsonToObject()
+	serverArr := serverList.Servers
+	fmt.Println(serverArr)
+	for _, server := range serverArr {
+		fmt.Println("服务器: ", server.ServerIndex, server.ServerName, server.ServerIP)
+	}
+
+	// uncertain json to parse
+	_json.ParseUncertainJson()
+}
+
+func fileTest() {
+	_file.Mkdir("go", "aa/bb/xx")
 }

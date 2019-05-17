@@ -1,17 +1,17 @@
 package restful
 
 import (
-	"net/http"
-		"log"
-		"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
-func DoGet(url string)  (r GithubUser, e error) {
+func DoGet(url string) (r GithubUser, e error) {
 	resp, err := http.Get(url)
 	result := ""
 	if resp != nil {
-		defer resp.Body.Close()	// go的特殊语法，main函数执行结束前会执行resp.Body.Close()
+		defer resp.Body.Close() // go的特殊语法，main函数执行结束前会执行resp.Body.Close()
 		if resp.StatusCode == http.StatusOK {
 			body, e := ioutil.ReadAll(resp.Body)
 			if e != nil {
@@ -22,7 +22,7 @@ func DoGet(url string)  (r GithubUser, e error) {
 	} else {
 		log.Fatal(err)
 	}
-	var gusr GithubUser
-	json.Unmarshal([]byte(result), &gusr)
-	return gusr, err
+	var githubUsr GithubUser
+	json.Unmarshal([]byte(result), &githubUsr)
+	return githubUsr, err
 }
