@@ -9,12 +9,19 @@ import (
 	"fmt"
 )
 
+/**
+	1. 服务绑定 localhost, 只有容器内可以使用
+	2. 服务绑定 0.0.0.0, 容器外可以使用
+
+	参考: https://www.jianshu.com/p/3e94a1277c11
+ */
+const HOST  = "0.0.0.0"
 
 func StartWebServer(port int) {
 	http.HandleFunc("/hello", sayHello)
 	http.HandleFunc("/login", login)
 	log.Println("开启服务器，监听端口：", port)
-	err := http.ListenAndServe(strings.Join([]string{"localhost", strconv.Itoa(port)}, ":"), nil) //设置监听的端口
+	err := http.ListenAndServe(strings.Join([]string{HOST, strconv.Itoa(port)}, ":"), nil) //设置监听的端口
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

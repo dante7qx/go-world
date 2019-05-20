@@ -12,6 +12,7 @@ import (
 	"dante-go/_db"
 	"dante-go/_json"
 	"dante-go/_file"
+	"dante-go/_web"
 )
 
 func main() {
@@ -44,10 +45,10 @@ func main() {
 	//concurrencyTest()
 
 	// 数据库测试
-	mysqlTest()
+	//mysqlTest()
 
 	// web 测试
-	//_web.StartWebServer(9101)
+	webTest()
 
 	// json 测试
 	//jsonTest()
@@ -201,6 +202,10 @@ func concurrencyTest() {
 
 func mysqlTest() {
 	_db.MysqlDB("localhost", "springboot", "root", "iamdante", 3306)
+}
+
+func webTest() {
+	_web.StartWebServer(8899)
 }
 
 func jsonTest() {

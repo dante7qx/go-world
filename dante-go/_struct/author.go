@@ -8,6 +8,11 @@ type Author struct {
 	Description string
 }
 
+func init() {
+	fmt.Println("初始化Author......")
+	fmt.Println("初始化Address......")
+}
+
 /**
 	方法 func (variable_name variable_data_type) function_name() [return_type] {}
  */
