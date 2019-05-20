@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"errors"
-	"_struct"
-		"interfaces"
-	"restful"
-	"_reflect"
-	"concurrencys"
-	"_pointer"
-	"_db"
-	"_json"
-	"_file"
+	"dante-go/_struct"
+	"dante-go/interfaces"
+	"dante-go/restful"
+	"dante-go/_reflect"
+	"dante-go/concurrencys"
+	"dante-go/_pointer"
+	"dante-go/_db"
+	"dante-go/_json"
+	"dante-go/_file"
 )
 
 func main() {
@@ -44,13 +44,13 @@ func main() {
 	//concurrencyTest()
 
 	// 数据库测试
-	//mysqlTest()
+	mysqlTest()
 
 	// web 测试
 	//_web.StartWebServer(9101)
 
 	// json 测试
-	//jsonTest()git
+	//jsonTest()
 
 	// 文件操作测试
 	//fileTest()
