@@ -20,13 +20,14 @@ func main() {
 	//structTest()
 
 	// 指针
-	//pointerTest()
+	pointerTest()
 
 	// 接口测试
 	//interfaceTest()
 
 	// 错误处理
 	//errTest(9, 3)
+	//panicTest()
 
 	// 数组和切片
 	//arrTest()
@@ -42,7 +43,7 @@ func main() {
 	//reflectTest()
 
 	// 并发测试
-	concurrencyTest()
+	//concurrencyTest()
 
 	// 数据库测试
 	//mysqlTest()
@@ -99,6 +100,10 @@ func interfaceTest() {
 	phone.Set("IPhone 8", "美国")
 	str := phone.Call("13932014370")
 	fmt.Println(str)
+	fmt.Println("========================================")
+	var x interfaces.Phone = &interfaces.IPhone{}
+	x.Set("11", "333")
+	fmt.Println(x.Call("xxx"))
 }
 
 /**
@@ -114,6 +119,16 @@ func errTest(a, b float64) {
 	} else {
 		fmt.Println(result)
 	}
+}
+
+func panicTest() {
+	var p *int
+	// 在可能出现 Panic 错误之前加入 recover()
+	defer func() {
+		err := recover()
+		fmt.Println("Panic 错误捕获处理示例【", err, "】")
+	}()
+	fmt.Println(*p)
 }
 
 func divide(a, b float64) (result float64, err error) {
@@ -223,4 +238,40 @@ func jsonTest() {
 
 func fileTest() {
 	_file.Mkdir("go", "aa/bb/xx")
+}
+
+/**
+init函数，先于main函数执行，实现包级别的一些初始化操作
+init函数的主要作用：
+
+初始化不能采用初始化表达式初始化的变量。
+程序运行前的注册。
+实现sync.Once功能。
+其他
+init函数的主要特点：
+
+init函数先于main函数自动执行，不能被其他函数调用；
+init函数没有输入参数、返回值；
+每个包可以有多个init函数；
+包的每个源文件也可以有多个init函数，这点比较特殊；
+同一个包的init执行顺序，golang没有明确定义，编程时要注意程序不要依赖这个执行顺序。
+不同包的init函数按照包导入的依赖关系决定执行顺序。
+
+*/
+func init() {
+	var initFuncInfo string = `
+init函数，先于main函数执行，实现包级别的一些初始化操作
+init函数的主要作用：
+	初始化不能采用初始化表达式初始化的变量。
+	程序运行前的注册。
+	实现sync.Once功能。
+init函数的主要特点：
+	init函数先于main函数自动执行，不能被其他函数调用；
+	init函数没有输入参数、返回值；
+	每个包可以有多个init函数；
+	包的每个源文件也可以有多个init函数，这点比较特殊；
+	同一个包的init执行顺序，golang没有明确定义，编程时要注意程序不要依赖这个执行顺序。
+	不同包的init函数按照包导入的依赖关系决定执行顺序。
+`
+	fmt.Printf("%s\n", initFuncInfo)
 }
