@@ -1,6 +1,10 @@
 package concurrencys
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+	"time"
+)
 
 func counting(ch chan int) {
 	ch <- 1
@@ -15,5 +19,19 @@ func Count(n int) {
 	}
 	for _, ch := range chs {
 		<-ch
+	}
+}
+
+func AsyncSay() {
+	go say("world") //开一个新的Goroutines执行
+	say("hello")
+}
+
+
+func say(s string) {
+	for i := 0; i < 5; i++  {
+		runtime.Gosched()
+		time.Sleep(time.Duration(3))
+		fmt.Println(s)
 	}
 }

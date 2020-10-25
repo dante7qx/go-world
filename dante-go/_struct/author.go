@@ -16,7 +16,7 @@ func init() {
 /**
 	方法 func (variable_name variable_data_type) function_name() [return_type] {}
  */
-func (author Author) Book(address Address, book string) string {
+func (author Author) SelfBook(address Address, book string) string {
 	return fmt.Sprintf("%s, %s在%d岁创作了《%s》。", buildAddress(address), author.Name, author.Age, book)
 }
 
