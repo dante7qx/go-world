@@ -1,12 +1,12 @@
-package k8s_test
+package object
 
 import (
 	"dante-client-go/factory"
 	"fmt"
-	"k8s.io/client-go/util/retry"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/util/retry"
 )
 
 /**
@@ -20,7 +20,7 @@ func CreateUpdateDeleteDeployment(namespace string, oper string) {
 			Name: "client-go-deployment",
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: int32Ptr(3),
+			Replicas: int32Ptr(1),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
 					"app": "clientgo-demo",
@@ -44,6 +44,12 @@ func CreateUpdateDeleteDeployment(namespace string, oper string) {
 									ContainerPort: 8080,
 								},
 							},
+						},
+					},
+					HostAliases: []apiv1.HostAlias{
+						{
+							IP: "220.181.38.148",
+							Hostnames: []string{"x.dante.com"},
 						},
 					},
 				},

@@ -9,7 +9,6 @@ package routers
 
 import (
 	"dante-beego/controllers"
-
 	"github.com/astaxie/beego"
 )
 

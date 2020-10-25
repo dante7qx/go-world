@@ -1,4 +1,4 @@
-package k8s_test
+package object
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

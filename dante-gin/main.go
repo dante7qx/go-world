@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"dante-gin/handler"
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -11,6 +11,7 @@ const (
 
 func main() {
 	router := gin.Default()
+
 	router.GET("/hello/:id", handler.GetHello)
 	router.POST("/hello/:id", handler.PostHello)
 
