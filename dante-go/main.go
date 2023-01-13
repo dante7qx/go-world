@@ -13,20 +13,21 @@ import (
 	"dante-go/restful"
 	"errors"
 	"fmt"
+	"os/exec"
 )
 
 func main() {
 	// 结构体
-	//structTest()
+	structTest()
 
 	// 指针
-	pointerTest()
+	//pointerTest()
 
 	// 接口测试
 	//interfaceTest()
 
 	// 错误处理
-	//errTest(9, 3)
+	//errTest(9, 2)
 	//panicTest()
 
 	// 数组和切片
@@ -56,6 +57,9 @@ func main() {
 
 	// 文件操作测试
 	//fileTest()
+
+	// 调用Shell测试
+	//invokeShell()
 }
 
 /**
@@ -64,7 +68,6 @@ func main() {
 func structTest() {
 	author1 := _struct.Author{Name: "但丁", Age: 33, Description: "一个沉迷Code的猎魔人！"}
 	address := _struct.Address{Country: "中国", Province: "北京市", Street: "方巷胡同13弄", Code: 1003}
-
 	fmt.Println("你好，Go 的世界！", author1.SelfBook(address, "无字天书"))
 }
 
@@ -150,6 +153,23 @@ func arrTest() {
 	for i, str := range strArr {
 		fmt.Println(i, str)
 	}
+
+	input := []int{1, 2, 3}
+	//range循环中的x变量是临时变量。range循环只是将值拷贝到x变量中。因此内存地址都是一样的。创建指针数组的时候，不适合用`range`循环。
+	var outRange []*int
+	for _, v := range input {
+		outRange = append(outRange, &v)
+	}
+	fmt.Println(*outRange[0], *outRange[1], *outRange[2])
+	fmt.Println(outRange)
+
+	// for 循环，内存地址是变化的。
+	var outFor []*int
+	for i :=0; i < len(input); i++ {
+		outFor = append(outFor, &input[i])
+	}
+	fmt.Println(*outFor[0], *outFor[1], *outFor[2])
+	fmt.Println(outFor)
 }
 
 func sliceTest() {
@@ -184,13 +204,20 @@ func mapTest() {
 	for k, v := range maps {
 		fmt.Println(k, v)
 	}
-
 	val, ok := maps["Java1"]
 	if ok {
 		fmt.Println("中文 ->", val)
 	} else {
 		fmt.Println("没有收录 Java")
 	}
+
+	fmt.Println("======================")
+	maps2 := make(map[string]int)
+	maps2["key1"] = 123
+	maps2["key2"] = 456
+	fmt.Println(maps2, "，长度：", len(maps2))
+	delete(maps2, "key2")
+	fmt.Println(maps2, "，长度：", len(maps2))
 }
 
 func restTest() {
@@ -241,6 +268,20 @@ func fileTest() {
 }
 
 /**
+Go语言调用Shell与可执行文件
+ */
+func invokeShell()  {
+	command := "source /Users/dante/Desktop/go.sh"
+	cmd := exec.Command("/bin/bash", "-c", command)
+	output, err := cmd.Output()
+	if err != nil {
+		fmt.Printf("Execute Shell:%s failed with error:%s", command, err.Error())
+		return
+	}
+	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
+}
+
+/**
 init函数，先于main函数执行，实现包级别的一些初始化操作
 init函数的主要作用：
 
@@ -258,9 +299,11 @@ init函数没有输入参数、返回值；
 不同包的init函数按照包导入的依赖关系决定执行顺序。
 
 */
+/**
 func init() {
 	var initFuncInfo string = `
-init函数，先于main函数执行，实现包级别的一些初始化操作
+===========================================================================================
+init函数，先于main函数执行，实现包级别的一些初始化操作								
 init函数的主要作用：
 	初始化不能采用初始化表达式初始化的变量。
 	程序运行前的注册。
@@ -272,6 +315,8 @@ init函数的主要特点：
 	包的每个源文件也可以有多个init函数，这点比较特殊；
 	同一个包的init执行顺序，golang没有明确定义，编程时要注意程序不要依赖这个执行顺序。
 	不同包的init函数按照包导入的依赖关系决定执行顺序。
+===========================================================================================
 `
 	fmt.Printf("%s\n", initFuncInfo)
 }
+ */
