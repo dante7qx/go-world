@@ -16,3 +16,11 @@ export GOOS=darwin
 export GOARCH=amd64
 go build
 
+ICEServer:
+stun:stun.voxgratia.org
+stun:stun.l.google.com:19302
+stun:stun.minisipserver.com
+stun:stun.zoiper.com
+stun:stun.voipstunt.com
+stun:stunserver.org
+stun:stun.voip.aebc.com

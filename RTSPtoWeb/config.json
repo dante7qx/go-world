@@ -14,11 +14,7 @@
     "https_cert": "server.crt",
     "https_key": "server.key",
     "https_port": ":443",
-    "ice_credential": "",
-    "ice_servers": [
-      "stun:stun.l.google.com:19302"
-    ],
-    "ice_username": "",
+    "ice_servers": ["stun:stun.voxgratia.org"],
     "log_level": "debug",
     "rtsp_port": ":5541",
     "token": {
