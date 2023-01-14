@@ -29,6 +29,15 @@
     "webrtc_port_min": 0
   },
   "streams": {
+    "a245ccba-867f-430c-be35-77a4fce4141a": {
+      "channels": {
+        "0": {
+          "on_demand": true,
+          "url": "rtsp://admin:risun8768@192.168.1.249:554/Streaming/Channels/101"
+        }
+      },
+      "name": "过道"
+    },
     "company": {
       "channels": {
         "0": {

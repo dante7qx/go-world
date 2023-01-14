@@ -12,11 +12,9 @@
     ],
     "rtsp_port": ":5541"
   },
-  "streams": {
-    "channel_defaults": {
-      "on_demand": true,
-      "debug": false,
-      "status": 0
-    }
+  "channel_defaults": {
+    "on_demand": true,
+    "debug": false,
+    "status": 0
   }
 }
