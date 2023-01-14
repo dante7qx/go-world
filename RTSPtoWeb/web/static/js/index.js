@@ -132,12 +132,14 @@ function goRequest(method, uuid, data) {
     type: type,
     dataType: 'json',
     beforeSend: function(xhr) {
-      xhr.setRequestHeader("Authorization", "Basic " + btoa("demo:demo"));
+      xhr.setRequestHeader("Authorization", "Basic " + btoa("risun:risun#8989!"));
     },
     success: function(response) {
+      console.log("=====>", response)
       goRequestHandle(method, response, uuid);
     },
     error: function(e) {
+      console.log("=====>666666666")
       console.log(e);
     }
   };

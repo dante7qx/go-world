@@ -5,7 +5,13 @@ export GOARCH=amd64
 go build
 
 ## linux
-export CGO_ENABLED=1
+export CGO_ENABLED=0
+export GOOS=linux
+export GOARCH=amd64 CC=x86_64-linux-musl-gcc CXX=x86_64-linux-musl-g++
+go build
+
+## linux2
+export CGO_ENABLED=0
 export GOOS=linux
 export GOARCH=amd64
 go build
@@ -24,3 +30,6 @@ stun:stun.zoiper.com
 stun:stun.voipstunt.com
 stun:stunserver.org
 stun:stun.voip.aebc.com
+
+## 测试 RSTP
+rtsp://admin:risun8768@192.168.1.249:554/Streaming/Channels/101

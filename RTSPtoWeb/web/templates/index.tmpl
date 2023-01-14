@@ -104,18 +104,12 @@
                     <a class="btn btn-info btn-flat btn-xs" href="/pages/player/webrtc/{{$key}}/0"><i class="fas fa-play"></i> WebRTC</a>
                     <a class="btn btn-info btn-flat btn-xs" href="/pages/player/all/{{$key}}/0"><i class="fas fa-play"></i> ALL</a>
                     {{end}}
-
-
-
                     <a class="btn btn-secondary btn-flat btn-xs" href="/pages/stream/edit/{{$key}}"><i class="fas fa-edit"></i> Edit</a>
                     <a class="btn btn-danger btn-flat btn-xs" onclick="deleteStream('{{ $key }}')" href="#"><i class="fas fa-times"></i> Delete</a>
                 </div>
               </div>
             </div>
-
-
           </div>
-
         </div>
       </div>
       {{ end }}
@@ -124,6 +118,5 @@
 
 </div>
 <!-- /.content -->
-
 
 {{template "foot.tmpl" .}}

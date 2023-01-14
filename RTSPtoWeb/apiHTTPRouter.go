@@ -16,6 +16,8 @@ type Message struct {
 	Payload interface{} `json:"payload"`
 }
 
+const YYYYMMDDHHMISS = "2006-01-02 10:10:10"
+
 //HTTPAPIServer start http server routes
 func HTTPAPIServer() {
 	//Set HTTP API mode
@@ -46,7 +48,7 @@ func HTTPAPIServer() {
 
 	if Storage.ServerHTTPDemo() {
 		public.LoadHTMLGlob(Storage.ServerHTTPDir() + "/templates/*")
-		public.GET("/", HTTPAPIServerIndex)
+		privat.GET("/", HTTPAPIServerIndex)
 		public.GET("/pages/stream/list", HTTPAPIStreamList)
 		public.GET("/pages/stream/add", HTTPAPIAddStream)
 		public.GET("/pages/stream/edit/:uuid", HTTPAPIEditStream)
@@ -56,6 +58,7 @@ func HTTPAPIServer() {
 		public.GET("/pages/multiview", HTTPAPIMultiview)
 		public.Any("/pages/multiview/full", HTTPAPIFullScreenMultiView)
 		public.GET("/pages/documentation", HTTPAPIServerDocumentation)
+		public.GET("/pages/usage", HTTPAPIServerUsage)
 		public.GET("/pages/player/all/:uuid/:channel", HTTPAPIPlayAll)
 		public.StaticFS("/static", http.Dir(Storage.ServerHTTPDir()+"/static"))
 	}
@@ -155,7 +158,7 @@ func HTTPAPIServerIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "index",
 	})
 
@@ -165,8 +168,17 @@ func HTTPAPIServerDocumentation(c *gin.Context) {
 	c.HTML(http.StatusOK, "documentation.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "documentation",
+	})
+}
+
+func HTTPAPIServerUsage(c *gin.Context) {
+	c.HTML(http.StatusOK, "usage.tmpl", gin.H{
+		"port":    Storage.ServerHTTPPort(),
+		"streams": Storage.Streams,
+		"version": time.Now().Format(YYYYMMDDHHMISS),
+		"page":    "usage",
 	})
 }
 
@@ -174,7 +186,7 @@ func HTTPAPIStreamList(c *gin.Context) {
 	c.HTML(http.StatusOK, "stream_list.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "stream_list",
 	})
 }
@@ -183,7 +195,7 @@ func HTTPAPIPlayHls(c *gin.Context) {
 	c.HTML(http.StatusOK, "play_hls.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "play_hls",
 		"uuid":    c.Param("uuid"),
 		"channel": c.Param("channel"),
@@ -193,7 +205,7 @@ func HTTPAPIPlayMse(c *gin.Context) {
 	c.HTML(http.StatusOK, "play_mse.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "play_mse",
 		"uuid":    c.Param("uuid"),
 		"channel": c.Param("channel"),
@@ -203,7 +215,7 @@ func HTTPAPIPlayWebrtc(c *gin.Context) {
 	c.HTML(http.StatusOK, "play_webrtc.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "play_webrtc",
 		"uuid":    c.Param("uuid"),
 		"channel": c.Param("channel"),
@@ -213,7 +225,7 @@ func HTTPAPIAddStream(c *gin.Context) {
 	c.HTML(http.StatusOK, "add_stream.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "add_stream",
 	})
 }
@@ -221,7 +233,7 @@ func HTTPAPIEditStream(c *gin.Context) {
 	c.HTML(http.StatusOK, "edit_stream.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "edit_stream",
 		"uuid":    c.Param("uuid"),
 	})
@@ -231,7 +243,7 @@ func HTTPAPIMultiview(c *gin.Context) {
 	c.HTML(http.StatusOK, "multiview.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "multiview",
 	})
 }
@@ -240,7 +252,7 @@ func HTTPAPIPlayAll(c *gin.Context) {
 	c.HTML(http.StatusOK, "play_all.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"page":    "play_all",
 		"uuid":    c.Param("uuid"),
 		"channel": c.Param("channel"),
@@ -275,7 +287,7 @@ func HTTPAPIFullScreenMultiView(c *gin.Context) {
 	c.HTML(http.StatusOK, "fullscreenmulti.tmpl", gin.H{
 		"port":    Storage.ServerHTTPPort(),
 		"streams": Storage.Streams,
-		"version": time.Now().String(),
+		"version": time.Now().Format(YYYYMMDDHHMISS),
 		"options": createParams,
 		"page":    "fullscreenmulti",
 		"query":   c.Request.URL.Query(),

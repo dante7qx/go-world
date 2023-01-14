@@ -83,6 +83,15 @@
             </li>
             <li class="nav-header">其他</li>
             <li class="nav-item">
+              <a href="/pages/usage" class="nav-link
+              {{ if eq .page "usage"}}
+                active
+              {{end}}">
+                <i class="nav-icon fas fa-file"></i>
+                <p>使用说明</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="/pages/documentation" class="nav-link
               {{ if eq .page "documentation"}}
                 active

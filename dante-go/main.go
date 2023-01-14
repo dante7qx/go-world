@@ -14,11 +14,12 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"time"
 )
 
 func main() {
 	// 结构体
-	structTest()
+	//structTest()
 
 	// 指针
 	//pointerTest()
@@ -60,6 +61,9 @@ func main() {
 
 	// 调用Shell测试
 	//invokeShell()
+
+	// 语法测试
+	grammarTest()
 }
 
 /**
@@ -165,7 +169,7 @@ func arrTest() {
 
 	// for 循环，内存地址是变化的。
 	var outFor []*int
-	for i :=0; i < len(input); i++ {
+	for i := 0; i < len(input); i++ {
 		outFor = append(outFor, &input[i])
 	}
 	fmt.Println(*outFor[0], *outFor[1], *outFor[2])
@@ -269,8 +273,8 @@ func fileTest() {
 
 /**
 Go语言调用Shell与可执行文件
- */
-func invokeShell()  {
+*/
+func invokeShell() {
 	command := "source /Users/dante/Desktop/go.sh"
 	cmd := exec.Command("/bin/bash", "-c", command)
 	output, err := cmd.Output()
@@ -279,6 +283,15 @@ func invokeShell()  {
 		return
 	}
 	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
+}
+
+/**
+语法测试
+*/
+func grammarTest() {
+	const YYYYMMDDHHMISS = "2006-01-02 10:10:10"
+	fmt.Println(time.Now().Format(YYYYMMDDHHMISS))
+
 }
 
 /**
@@ -303,7 +316,7 @@ init函数没有输入参数、返回值；
 func init() {
 	var initFuncInfo string = `
 ===========================================================================================
-init函数，先于main函数执行，实现包级别的一些初始化操作								
+init函数，先于main函数执行，实现包级别的一些初始化操作
 init函数的主要作用：
 	初始化不能采用初始化表达式初始化的变量。
 	程序运行前的注册。
@@ -319,4 +332,4 @@ init函数的主要特点：
 `
 	fmt.Printf("%s\n", initFuncInfo)
 }
- */
+*/
