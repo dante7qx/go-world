@@ -32,4 +32,7 @@ stun:stunserver.org
 stun:stun.voip.aebc.com
 
 ## 测试 RSTP
+## 公司
 rtsp://admin:risun8768@192.168.1.249:554/Streaming/Channels/101
+## 伏羲庙
+rtsp://tssbwg:tssbwg@111.11.166.28:554/cam/realmonitor?channel=1&subtype=0

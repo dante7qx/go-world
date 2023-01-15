@@ -1,503 +1,232 @@
 {{template "head.tmpl" .}}
 <div class="content" style="overflow: auto; height: 900px;">
   <div class="container-fluid">
-<h1 id="1-ajax-请求-put、delete方法">1. Ajax 请求 PUT、DELETE方法</h1>
-<pre><code class="language-javascript">$.ajax({
-    type: &quot;POST&quot;,
-    url: &quot;&quot;,
-    dataType : &quot;json&quot;,
-    async : false,
-    data : {
-        //该参数指定后台接受方法类型,put/delete
-        _method : &quot;delete&quot;,
-    },
-    success : function(data) {
-    }
-});
-
-</code></pre>
-<h1 id="2-springmvc-前台传递数组，后台接受方法">2. SpringMvc 前台传递数组，后台接受方法</h1>
-<pre><code class="language-java">@RequestParam(value = &quot;args[]&quot;) String[] args
-</code></pre>
-<h1 id="3-hibernate-命名策略">3. Hibernate 命名策略</h1>
-<p>hibernate 自动将驼峰型转换成 <code>*_*</code> 型。即 UpdateBy —&gt; update_by，下面的 issues 可以处理</p>
-<pre><code class="language-properties">spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-</code></pre>
-<ul>
-<li><a href="https://github.com/spring-projects/spring-boot/issues/6264">https://github.com/spring-projects/spring-boot/issues/6264</a></li>
-</ul>
-<h1 id="4-long小记">4. Long小记</h1>
-<pre><code class="language-java">Long x1 = 34L;
-Long x2 = 34L;
-
-Long y1 = 334L;
-Long y2 = 334L;
-
-x1 == x2 ==&gt; true
-y1 == y2 ==&gt; false
-
-Long 会为数据创建一个初始大小为1个字节（大小为-128~127）的空间存放0或1的二进制的数据，但是当超过这个容量时，他会重新创建数据的容量在堆内存中new出来
-</code></pre>
-<h1 id="5-requestgetinputstream">5. request.getInputStream</h1>
-<ol>
-<li><p>Inputstream</p>
-<pre><code>InputStream:  read方法内部有一个，postion，标志当前流读取到的位置，每读取一次，位置就会移动一次，如果读到最后，InputStream.read方法会返回-1，标志已经读取完了，如果想再次读取，可以调用inputstream.reset方法，position就会移动到上次调用mark的位置，mark默认是0，所以就能从头再读了。
-
-当然，能否reset是有条件的，它取决于markSupported,markSupported() 方法返回是否可以mark/reset。
-
-**request.getInputStream**返回的值是**ServletInputStream**,查看**ServletInputStream**源码发现，没有重写reset方法，所以查看InputStream源码发现marksupported  返回false，并且reset方法，直接抛出异常。
-</code></pre>
-<pre><code class="language-java">public abstract class ServletInputStream extends InputStream {
-    protected ServletInputStream() { }
-    public int readLine(byte[] b, int off, int len) throws IOException {
-        if (len &lt;= 0) {
-            return 0;
-        }
-        int count = 0, c;
-        while ((c = read()) != -1) {
-            b[off++] = (byte)c;
-            count++;
-            if (c == &#39;\n&#39; || count == len) {
-            break;
+    <h2 align="center">睿阳视频监控解析平台</h2>
+    <h2 id="一-概述">一. 概述</h2>
+    <p>睿阳视频监控解析平台基于开源项目 <a href="https://github.com/deepch/RTSPtoWeb">RTSPtoWeb</a>，进行二次研发。平台用于将您的 RTSP 流转换为可在 Web 浏览器中使用的格式，
+    例如：MSE、WebRTC 或 HLS。 它是完全原生的 Golang，无需使用 FFmpeg 或 GStreamer！</p>
+    <h2 id="二-使用说明">二. 使用说明</h2>
+    <h3 id="1-下载平台">1. 下载平台</h3>
+    <p>睿阳视频监控解析平台已上传SVN，地址：<code>svn://116.176.33.76:8443/videomonitor</code>。目录结构如下：</p>
+    <pre><code class="language-shell">├── config.json                   ## 配置文件
+    ├── config.json.example.json      ## 配置样例
+    ├── examples                      ## 页面集成样例
+    │   ├── hls                       ## hls 集成样例
+    │   ├── hlsll                     ## hlsll 集成样例
+    │   ├── mse                       ## mse 集成样例
+    │   └── webrtc                    ## webrtc 集成样例
+    ├── run                           ## Linux 可执行文件
+    ├── run.exe                       ## Windows 可执行文件
+    ├── runMAC                        ## MacOS 可执行文件
+    └── web                           ## 平台控制台页面
+        ├── static
+        └── templates
+    </code></pre>
+    <h3 id="2-配置并运行">2. 配置并运行</h3>
+    <pre><code class="language-json">{
+      &quot;channel_defaults&quot;: {},
+      &quot;server&quot;: {
+        &quot;debug&quot;: true,
+        &quot;http_debug&quot;: false,
+        &quot;http_demo&quot;: true,
+        &quot;http_dir&quot;: &quot;&quot;,
+        &quot;http_login&quot;: &quot;user&quot;,
+        &quot;http_password&quot;: &quot;userpassword&quot;,
+        &quot;http_port&quot;: &quot;:8083&quot;,
+        &quot;https&quot;: false,
+        &quot;https_auto_tls&quot;: false,
+        &quot;https_auto_tls_name&quot;: &quot;&quot;,
+        &quot;https_cert&quot;: &quot;&quot;,
+        &quot;https_key&quot;: &quot;&quot;,
+        &quot;https_port&quot;: &quot;&quot;,
+        &quot;ice_credential&quot;: &quot;&quot;,
+        &quot;ice_servers&quot;: [
+          &quot;stun:stun.l.google.com:19302&quot;
+        ],
+        &quot;ice_username&quot;: &quot;&quot;,
+        &quot;log_level&quot;: &quot;info&quot;,
+        &quot;rtsp_port&quot;: &quot;:5541&quot;,
+        &quot;token&quot;: {
+          &quot;backend&quot;: &quot;&quot;,
+          &quot;enable&quot;: false
+        },
+        &quot;webrtc_port_max&quot;: 0,
+        &quot;webrtc_port_min&quot;: 0
+      },
+      &quot;streams&quot;: {
+        &quot;test&quot;: {
+          &quot;channels&quot;: {
+            &quot;0&quot;: {
+              &quot;name&quot;: &quot;摄像头1&quot;,
+              &quot;on_demand&quot;: true,
+              &quot;url&quot;: &quot;rtsp://admin:risun8768@192.168.1.249:554/Streaming/Channels/101&quot;
             }
+          },
+          &quot;name&quot;: &quot;测试&quot;
         }
-        return count &gt; 0 ? count : -1;
+      }
     }
-    public abstract boolean isFinished();
-    public abstract boolean isReady();
-    public abstract void setReadListener(ReadListener readListener);
-}
-</code></pre>
-</li>
-</ol>
-<ul>
-<li><a href="https://my.oschina.net/serge/blog/1094063">https://my.oschina.net/serge/blog/1094063</a></li>
-<li><a href="http://www.jianshu.com/p/f7f8237861e7">http://www.jianshu.com/p/f7f8237861e7</a></li>
-<li><a href="https://github.com/sergewu/demo">https://github.com/sergewu/demo</a></li>
-</ul>
-<h1 id="6-dubbo-启动警告">6. Dubbo 启动警告</h1>
-<p>dubbo2.5.7启动时会产生警告，因为dubbo默认使用 Log4j记录日志，替换Logback来输出日志，操作如下</p>
-<pre><code class="language-yacas">log4j:WARN No appenders could be found for logger (com.alibaba.dubbo.common.logger.LoggerFactory).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-</code></pre>
-<ol>
-<li><p>加入 Logback 的依赖（Springboot中默认加入了Logback依赖）</p>
-</li>
-<li><p>在dubbo的依赖中要排除对log4j的依赖</p>
-<pre><code class="language-xml">&lt;dependency&gt;
-  &lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;
-  &lt;artifactId&gt;zookeeper&lt;/artifactId&gt;
-  &lt;version&gt;${zookeeper.version}&lt;/version&gt;
-  &lt;exclusions&gt;
-    &lt;exclusion&gt;
-      &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-      &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
-    &lt;/exclusion&gt;
-    &lt;exclusion&gt;
-      &lt;groupId&gt;log4j&lt;/groupId&gt;
-      &lt;artifactId&gt;log4j&lt;/artifactId&gt;
-    &lt;/exclusion&gt;
-  &lt;/exclusions&gt;
-&lt;/dependency&gt;
-</code></pre>
-</li>
-</ol>
-<h1 id="7-easyui-springmvc-传递日期">7. EasyUI, SpringMVC 传递日期</h1>
-<ol>
-<li><p>Spring如何处理前端传递的日期</p>
-<pre><code>SpringMVC 在接收前台的日期参数时，并不会将日期字符串（例：yyyy-MM-dd）自动进行转换，一般会抛出异常 `Cannot convert value of type [java.lang.String] to required type [java.util.Date] for property &#39;actionDate&#39;`。
-
-因此需要进行数据绑定，利用 @InitBinder 和 WebDataBinder，代码如下：
-</code></pre>
-<pre><code class="language-java">// 自定义一个 PropertyEditorSupport
-public class SpecialDateEditor extends PropertyEditorSupport {
-    @Override
-    public void setAsText(String text) {
-        if(StringUtils.isEmpty(text)) {
-            setValue(null);
-            return;
-        }
-        Date date = null;
-        if(text.matches(&quot;^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$&quot;)) {
-            date = DateUtils.parseDateTime(text);
-        } else if(text.matches(&quot;^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$&quot;)) {
-            date = DateUtils.parseDateTime(text, TimeFormat.LONG_DATE_MINU_PATTERN_LINE);
-        } else if(text.matches(&quot;^\\d{4}-\\d{1,2}-\\d{1,2}$&quot;)) {
-            date = DateUtils.parseDate(text);
-        } else if(text.matches(&quot;^\\d{4}-\\d{1,2}$&quot;)) {
-            date = DateUtils.parseDate(text + &quot;-01&quot;);
-        }
-        setValue(date);
-    }
-}
-
-// 建立一个全局 Controller
-public class BaseController {
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new SpecialDateEditor());
-    }
-}
-</code></pre>
-</li>
-<li><p>SpringMVC 后端传递日期参数到前台，使用Jackson注解 @JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;, timezone = &quot;GMT+8&quot;)</p>
-<pre><code class="language-java">@JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;, timezone = &quot;GMT+8&quot;)
-private Date startTime;
-</code></pre>
-</li>
-</ol>
-<ul>
-<li><a href="https://segmentfault.com/a/1190000007013461">https://segmentfault.com/a/1190000007013461</a></li>
-<li><a href="http://blog.csdn.net/dailuwen/article/details/60322864">http://blog.csdn.net/dailuwen/article/details/60322864</a></li>
-<li><a href="https://xtuer.github.io/spring-mvc-to-date/">https://xtuer.github.io/spring-mvc-to-date/</a></li>
-</ul>
-<h1 id="8-springboot读取jar包中文件">8. Springboot读取jar包中文件</h1>
-<p><code>getClass().getClassLoader().getResourceAsStream(&quot;static/xxx.pdf&quot;);</code></p>
-<h1 id="9-mysql插入内容过长（packet-for-query-is-too-large）">9. Mysql插入内容过长（Packet for query is too large）</h1>
-<p>解决办法：MySQL的一个系统参数：max_allowed_packet，其默认值为1048576(1M)，</p>
-<p>查询：showVARIABLES like &#39;%max_allowed_packet%&#39;;</p>
-<p>修改此变量的值：</p>
-<p>MySQL安装目录下的</p>
-<p>my.ini文件中的[mysqld]段中的＂max_allowed_packet = 1M＂，(可能有些文件会没有这一行的)</p>
-<p>格式为：</p>
-<p>[mysqld]</p>
-<p>max_allowed_packet = 1M （ 将1M更改为4M(如果没有这行内容，增加一行))，</p>
-<p>保存，</p>
-<p>重起MySQL服务。</p>
-<p>现在可以load大于1M的文件了</p>
-<h1 id="10-无限循环">10. 无限循环</h1>
-<p>for(;;)和while(true)都是无限循环</p>
-<p>编译前              编译后
- while (1)；      mov eax,1<br>​                          test eax,eax
-​                          je foo+23h
-​                          jmp foo+18h</p>
-<p>   编译前           编译后
-​    for (；；)；  jmp foo+23h 　　
-​    一目了然，for (；；)指令少，不占用寄存器，而且没有判断跳转，比while (1)好。 </p>
-<h1 id="11-⼀个接⼝有2个不同的实现autowired和resource">11. ⼀个接⼝有2个不同的实现,@Autowired和@Resource</h1>
-<ul>
-<li><p>@Autowired根据类型来进行自动注入，因为是类型相同的两个实现，需要配合@Qualifier才能达到目的</p>
-<pre><code class="language-java">@Autowired
-@Qualifier(&quot;TestImpl1&quot;)
-TestService testService;
-</code></pre>
-</li>
-<li><p>@Resource根据名字来进行自动注入，@Resource(&quot;TestImpl1&quot;)</p>
-</li>
-</ul>
-<p>参考：<a href="https://www.baeldung.com/spring-qualifier-annotation">https://www.baeldung.com/spring-qualifier-annotation</a></p>
-<h1 id="12-docker-删除--的-image">12. Docker 删除 <none> 的 Image</h1>
-<pre><code class="language-bash">docker rm $(docker images | grep none | awk &#39;{print $3 }&#39; | xargs)
-</code></pre>
-<h1 id="13-expected-single-matching-bean-but-found-2">13. expected single matching bean but found 2</h1>
-<p><a href="https://blog.csdn.net/hengyunabc/article/details/78762121">https://blog.csdn.net/hengyunabc/article/details/78762121</a></p>
-<pre><code class="language-markdown">禁止的办法有两种：
-
-1. 在main函数上配置exclude
-
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class })
-
-2. 在application.properties里配置：
-
-spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
-</code></pre>
-<h1 id="14-jakson-属性命名策略">14. Jakson 属性命名策略</h1>
-<pre><code class="language-yaml">---
-spring:
-  jackson:
-    property-naming-strategy: ### 不设置，返回 Json 同 Pojo 属性的名字
-      KEBAB_CASE              ## 中横线分隔，例：msg-id
-      LOWER_CASE              ## 小写，例：msgid
-      LOWER_CAMEL_CASE          ## 首字母小写驼峰，例：msgId
-      UPPER_CAMEL_CASE          ## 首字母大写驼峰，例：MsgId
-      SNAKE_CASE              ## 下横线分隔，例：msg_id
-
-## 也可以使用注解 @JsonProperty(value = &quot;msg_id&quot;)
-</code></pre>
-<h1 id="15-jenkins-打包-spring-boot-丢失配置文件">15. Jenkins 打包 spring boot 丢失配置文件</h1>
-<pre><code class="language-xml">&lt;!-- 在 pom.xml 中添加配置 --&gt;
-&lt;build&gt;
-    &lt;resources&gt;
-        &lt;resource&gt;
-            &lt;directory&gt;src/main/resources&lt;/directory&gt;
-        &lt;/resource&gt;
-    &lt;/resources&gt;
-&lt;/build&gt;
-</code></pre>
-<h1 id="16-spring-事务不生效">16. Spring 事务不生效</h1>
-<p>Spring 通过AOP 进行事务控制，即代理模式。</p>
-<ol>
-<li>数据库引擎不支持，mysql 的 MyISAM 不支持事务，需要改成 InnoDB。</li>
-<li>入口方法必须是 public 的。<strong>private 方法, final 方法 和 static 方法</strong>不能添加事务，加了也不生效。</li>
-<li>Spring 事务默认只对出现<strong>运行期异常</strong>（java.lang.RuntimeException及其子类）进行回滚。</li>
-<li>是否开启事务管理，即 @EnableTransactionManager。Springboot1.4 后可不写，因为 <strong>JpaTransactionManager</strong> 和 <strong>DataSourceTransactionManager</strong> 已经包含了。</li>
-<li>确认类是否已经被其他类代理了。</li>
-<li>业务和事务必须在同一个线程中，否则不生效。</li>
-</ol>
-<pre><code class="language-java">@Transactional
-public void save(User user1, User user2) {
-    new Tread(() -&gt; {
-        saveError(user1, user2);
-        System.out.println(1 / 0);
-    }).start();
-}
-</code></pre>
-<ol start="7">
-<li>在同一个类中，<strong>一个无事务的方法调用另一个有事务的方法，事务是不会起作用的</strong></li>
-</ol>
-<pre><code class="language-java">/**
-    事务不生效
-**/
-public void saveUser(User user, UserAddress userAddress) {
-    userDAO.save(user);
-    saveAddress(userAddress);
-}
-@Transactional
-public void saveAddress(UserAddress userAddress) {
-    addressDAO.save(userAddress);
-}
-</code></pre>
-<p>#17. Transaction rolled back because it has been marked as rollback-only</p>
-<p>参考 Springboot ---&gt; springboot-druid 项目</p>
-<h1 id="18springboot-jpa-时区问题">18.Springboot JPA 时区问题</h1>
-<p>Springboot JPA 默认入库时区是 UTC，需要进行修改数据库连接，指定时区 。</p>
-<pre><code class="language-properties">## 数据库连接
-&amp;serverTimezone=Asia/Shanghai
-## jackson时区配置
-spring.jackson.time-zone=Asia/Shanghai
-## Hibernate时区配置
-spring.jpa.properties.hibernate.jdbc.time_zone=Asia/Shanghai
-</code></pre>
-<h1 id="19-springboot-jpa-no-serializer-found-for-">19. Springboot JPA No serializer found for ...</h1>
-<p>懒加载的映射类可能为空，即 Optional<T>。</p>
-<p>解决方法：在被懒加载的类上添加 @JsonIgnoreProperties(value = { &quot;hibernateLazyInitializer&quot;, &quot;handler&quot; })</p>
-<p><a href="https://blog.csdn.net/a15123837995/article/details/83788489">https://blog.csdn.net/a15123837995/article/details/83788489</a></p>
-<h1 id="20-mac-容器访问宿主机">20. Mac 容器访问宿主机</h1>
-<p>Mac系统容器内访问宿主机，使用域名 <code>docker.for.mac.host.internal</code>，即docker内部实际上实现了一个虚拟网桥docker0，需要通过网桥找到外部宿主机的在网桥的虚拟地址。</p>
-<p><a href="https://docs.docker.com/docker-for-mac/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host">https://docs.docker.com/docker-for-mac/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host</a></p>
-<h1 id="21-jvm调优">21. JVM调优</h1>
-<p>-XX:MetaspaceSize=128m （元空间默认大小）
--XX:MaxMetaspaceSize=128m （元空间最大大小）
--Xms1024m （堆默认大小）
--Xmx1024m （堆最大大小）
--Xmn256m （新生代大小）
--Xss256k （棧最大深度大小）
--XX:SurvivorRatio=8 （新生代分区比例 8:2）
--XX:+UseConcMarkSweepGC （指定使用的垃圾收集器，这里使用CMS收集器）
--XX:+PrintGCDetails （打印详细的GC日志） </p>
-<h1 id="22-springboot2-初始化datasql和schemasql">22. Springboot2 初始化data.sql和schema.sql</h1>
-<ul>
-<li><a href="https://blog.csdn.net/zhengzizhi/article/details/81505900">https://blog.csdn.net/zhengzizhi/article/details/81505900</a></li>
-</ul>
-<pre><code class="language-yaml">spring:
-  profiles: development
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/dev?useSSL=false
-    username: root
-    password: dbpass
-    schema-username: root
-    schema-password: dbpass
-    data-username: root
-    data-password: dbpass
-    platform: mysql
-    schema: classpath:schema.sql
-    data: classpath:data.sql
-    continue-on-error: true
-    initialization-mode: always
-</code></pre>
-<h1 id="23-log4j-读取系统环境变量">23. log4j 读取系统环境变量</h1>
-<p>log4j 只能读取java的属性文件，System.getProperty(&quot;MY_POD_NAME&quot;)。即，java -jar -DMY_POD_NAME。所以可以在 spring context 初始化的时候，进行如下设置</p>
-<pre><code class="language-java">public class CCBApiServerApplication {
-    public static void main(String[] args) {
-    System.setProperty(&quot;MY_POD_NAME&quot;, System.getEnv(&quot;MY_POD_NAME&quot;));
-        SpringApplication.run(CCBApiServerApplication.class, args);
-    }
-}
-</code></pre>
-<h1 id="24-java启动安全随机数">24. Java启动安全随机数</h1>
-<p>Java应用程序使用 java.security.SecureRandom 类通过加密强度高的伪随机数生成器（CSPRNG）来生成加密强度高的随机值。获取随机数算法的提供者是底层操作系统提供的随机数据。</p>
-<p>对于Linux，提供设备是 /dev/random 和 /dev/urandom</p>
-<ul>
-<li><p><strong>/dev/random</strong>（阻塞高强度密钥）</p>
-<p>一个特殊的设备文件，可以用于随机数发生器或伪随机数发生器。生产器有一个容纳噪声数据的<strong>熵池</strong>，在读取时，<code>/dev/random</code>设备会返回小于熵池噪声总数的随机字节。<code>/dev/random</code>可生成高随机性的<strong>公钥</strong>或<strong>一次性密码本</strong>。若熵池空了，对<code>/dev/random</code>的读操作将会被<strong>阻塞</strong>，直到收集到了足够的环境噪声为止。这样的设计使得<code>/dev/random</code>是真正的随机数发生器，提供了最大可能的随机数据熵，建议在需要生成高强度的密钥时使用。</p>
-</li>
-<li><p><strong>/dev/urandom</strong>（非阻塞低强度）</p>
-<p><code>/dev/urandom</code> 是 <code>/dev/random</code> 的一个副本。它会重复使用熵池中的数据以产生伪随机数据。这表示对<code>/dev/urandom</code>的读取操作不会产生阻塞，但其输出的熵可能小于<code>/dev/random</code>的。它可以作为生成较低强度密码的伪随机数生成器，不建议用于生成高强度长期密码。</p>
-</li>
-</ul>
-<p>管理员可以调用<a href="https://zh.wikipedia.org/wiki/Ioctl">ioctl</a>以增加熵池大小。Linux内核中当前熵的值和大小可以通过访问<code>/proc/sys/kernel/random/</code>文件夹中的文件得到。</p>
-<p>Java中，java.security.SecureRandom随机数算法使用的是”SHA1PRNG”，默认情况下，JVM中SecureRandom类使用<code>/dev/urandom</code>来生成随机值，因此Java代码启动可能会意外阻塞。建议使用系统属性 <code>-Djava.security.egd=file:/dev/./urandom</code>  指定 <code>/dev/urandom</code> 作为随机数的发生器。</p>
-<p>Tomcat 的 SessionID 也是使用Java中的 java.security.SecureRandom 来生成的，也可以设置 <code>-Djava.security.egd=file:/dev/./urandom</code> 来加快启动速度。</p>
-<p>参考：</p>
-<ul>
-<li><a href="https://blog.csdn.net/Small_StarOne/article/details/102972211">https://blog.csdn.net/Small_StarOne/article/details/102972211</a></li>
-<li><a href="https://zh.wikipedia.org/wiki//dev/random">https://zh.wikipedia.org/wiki//dev/random</a></li>
-</ul>
-<h1 id="25-mac-上修改docker宿主机内核参数">25. Mac 上修改Docker宿主机内核参数</h1>
-<ol>
-<li><p>终端输入命令（版本 &gt;= 18.06.0-ce-mac70）</p>
-<pre><code class="language-bash">screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
-</code></pre>
-</li>
-<li><p>在空白屏幕上，按住 RETURN，进入 Docker for Mac 的Linux 终端</p>
-<pre><code class="language-bash">## 临时修改
-sysctl -w vm.max_map_count=262144
-
-## 永久修改
-cd /etc/sysctl.d
-vi 00-alpine.conf
-## 在最后一行，添加 vm.max_map_count=262144
-</code></pre>
-</li>
-<li><p>退出终端：Control-A，然后 Control \</p>
-</li>
-<li><p>关于 vm.max_map_count，请参考 <a href="https://blog.csdn.net/anqixiang/article/details/104922680">https://blog.csdn.net/anqixiang/article/details/104922680</a></p>
-</li>
-</ol>
-<p>参考：<a href="https://www.thinbug.com/q/41192680">https://www.thinbug.com/q/41192680</a></p>
-<h1 id="26-maven项目，总是默认jdk-15-问题">26. maven项目，总是默认jdk 1.5 问题</h1>
-<p>1、  File--Project Structure--Project </p>
-<p>2、  File--Project Structure--Modules </p>
-<p>上面两个地方，关于版本设置的都改成正确的</p>
-<p>3、如果还是不成功，那就改 mvn 的 setting.xml 。但是如果 终端 mvn -v 显示的jdk版本正确的就没必要改了。在项目的 pom.xml指定</p>
-<pre><code class="language-xml">&lt;properties&gt;
-  &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-  &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
-  &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
-&lt;/properties&gt;
-</code></pre>
-<h1 id="27-mac-多版本-golang">27. Mac 多版本 golang</h1>
-<ul>
-<li><a href="https://blog.justin0u0.com/MacOS-%E4%BD%BF%E7%94%A8-Homebrew-%E7%AE%A1%E7%90%86%E5%A4%9A%E5%80%8B-Golang-%E7%89%88%E6%9C%AC/">https://blog.justin0u0.com/MacOS-%E4%BD%BF%E7%94%A8-Homebrew-%E7%AE%A1%E7%90%86%E5%A4%9A%E5%80%8B-Golang-%E7%89%88%E6%9C%AC/</a></li>
-</ul>
-<pre><code class="language-sh">brew install go
-brew search go
-brew install go@1.14
-
-## brew v2.6.0 後 brew switch 指令已經被廢棄
-mv go@1.14/* go/
-brew switch go 1.14.10
-brew switch go 1.13.5
-
-## 使用 brew link
-brew link --force --overwrite go@1.14
-## 切換回最新版本
-brew unlink go &amp;&amp; brew link go
-</code></pre>
-<h1 id="28-objectmapper-enabledefaulttyping-过期">28. ObjectMapper enableDefaultTyping 过期</h1>
-<p>Springboot2.2.X 之后 ObjectMapper enableDefaultTyping 方法过期，该方法的作用是指定序列化输入的类型。</p>
-<ul>
-<li>未设置了enableDefaultTyping，存储到redis里的数据将是没有类型的纯json，调用redis API获取到数据后，java解析将是<strong>LinkHashMap类型的key-value的数据结构</strong>，需要自行解析</li>
-</ul>
-<pre><code class="language-json">[{&quot;id&quot;:72,&quot;uuid&quot;:&quot;c4d7fc52-4096-4c79-81ef&quot;,&quot;type&quot;:2}]
-</code></pre>
-<ul>
-<li>设置了enableDefaultTyping，存储到redis里的数据将是有类型的json数据，这样java获取到数据后，将会将数据自动转化为<strong>java.util.ArrayList和com.model.app，方便直接使用</strong></li>
-</ul>
-<pre><code class="language-json">[&quot;java.util.ArrayList&quot;,[{&quot;@class&quot;:&quot;com.model.app&quot;,&quot;id&quot;:72,&quot;uuid&quot;:&quot;c4d7fc52-4096-4c79-81ef&quot;,&quot;type&quot;:2}]]
-</code></pre>
-<p>enableDefaultTyping 方法过期后的解决方法，使用activateDefaultTyping 方法</p>
-<pre><code class="language-java">objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,              ObjectMapper.DefaultTyping.NON_FINAL,
-     JsonTypeInfo.As.WRAPPER_ARRAY);
-</code></pre>
-<p>参考：<a href="https://blog.csdn.net/zzhongcy/article/details/105813105">https://blog.csdn.net/zzhongcy/article/details/105813105</a></p>
-<h1 id="29-mac无权限打开">29. Mac无权限打开</h1>
-<p><strong>解决方案：</strong></p>
-<p>使用UPX：</p>
-<ol>
-<li>安装upx</li>
-</ol>
-<pre><code class="language-ps1con">brew install upx
-</code></pre>
-<ol start="2">
-<li>使用UPX</li>
-</ol>
-<pre><code class="language-text">sudo upx -d /Applications/CORE\ Keygen.app/Contents/MacOS/CORE\ Keygen
-</code></pre>
-<ol start="3">
-<li>再打开CORE Keygen.app就可以使用了。</li>
-</ol>
-<h1 id="30-mac-dockerdesktop">30. Mac DockerDesktop</h1>
-<p><a href="https://github.com/AliyunContainerService/k8s-for-docker-desktop">https://github.com/AliyunContainerService/k8s-for-docker-desktop</a></p>
-<h1 id="31mysql--table-doesnt-exist">31.Mysql  Table doesn&#39;t exist</h1>
-<p><strong>修改mysql数据库配置：</strong>[mysqld] 下添加</p>
-<p>lower_case_table_names = 1 </p>
-<h1 id="32-springboot-jpa-原生sql">32. Springboot jpa 原生SQL</h1>
-<p><a href="https://blog.csdn.net/weixin_43944305/article/details/118256060?spm=1001.2101.3001.6650.4&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4.pc_relevant_default&amp;utm_relevant_index=7">https://blog.csdn.net/weixin_43944305/article/details/118256060?spm=1001.2101.3001.6650.4&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-4.pc_relevant_default&amp;utm_relevant_index=7</a></p>
-<h1 id="33-替换brew源">33. 替换brew源</h1>
-<p>brew命令：<a href="https://zqblog.beaf.tech/brew-cheatsheet/">https://zqblog.beaf.tech/brew-cheatsheet/</a></p>
-<p>换源：<a href="https://cloud.tencent.com/developer/article/1614039">https://cloud.tencent.com/developer/article/1614039</a></p>
-<h1 id="34-mac下dd速度慢">34. Mac下dd速度慢</h1>
-<p>mac下使用 &quot;dd&quot; 命令制作U盘镜像：</p>
-<p>OS X与linux一脉同源,命令是一样的,只不过MAC中会自动挂载U盘,执行dd命令前,必须先卸载U盘.</p>
-<ol>
-<li>先用diskutil list命令查看USB设备挂载路径</li>
-<li>用diskutil umountDisk /dev/disk2 卸载U盘,这里不能使用系统自带的图形工具卸载.diskutil umountDisk 只是卸载了U盘的文件系统,设备还在.MAC自带的管理工具会把整个USB设备完全移除</li>
-<li>现在可以”dd”U盘镜像了</li>
-</ol>
-<pre><code class="language-bash">dd if=/Users/dante/Desktop/CentOS-Stream-9-latest-x86_64-dvd1.iso of=/dev/disk2
-</code></pre>
-<p>注意：dd的速度很慢，原因也很可能和mac os10.13之后更换的新文件系统APFS有关，需要换成下面的命令</p>
-<pre><code class="language-bash">dd if=/Users/dante/Desktop/CentOS-Stream-9-latest-x86_64-dvd1.iso of=/dev/rdisk2
-</code></pre>
-<ol start="4">
-<li>烧录完成</li>
-</ol>
-<pre><code class="language-bash">diskutil eject [硬碟位置]
-</code></pre>
-<h1 id="35-springboot外部配置">35. Springboot外部配置</h1>
-<p><a href="https://www.cnblogs.com/alinainai/p/14331442.html">https://www.cnblogs.com/alinainai/p/14331442.html</a></p>
-<p>在启动配置中心的时候，由于配置中心里面的配置，比如git配置等等，在不同的环境中是不一样的，因此需要在外部指定，
-刚开始选择使用spring.config.location来指定外部配置文件，如：</p>
-<pre><code class="language-yml">-Dspring.config.location=C:\\Users\\XB\Desktop\\config\\config-test.yml
-</code></pre>
-<p>结果config-test.yml这个文件直接取代了我项目本地的application.yml文件，导致有些本地配置中独有的配置也没有被加载进来。</p>
-<p><strong>解决方案</strong></p>
-<p>使用spring.config.additional-location替代spring.config.location</p>
-<pre><code class="language-yml">-Dspring.config.additional-location=C:\\Users\\XB\Desktop\\config\\config-test.yml
-</code></pre>
-<h1 id="36-chrome-连接不是私密连接">36. Chrome 连接不是私密连接</h1>
-<p>就是在当前页面用键盘输入 thisisunsafe ，不是在地址栏输入，就直接敲键盘就行了，页面即会自动刷新进入网页。</p>
-<h1 id="37-jdk11下undertow报错">37. JDK11下Undertow报错</h1>
-<p>在 Windows 环境，JDK1.8.0_331、JDK11+下，Undertow启动会报错</p>
-<pre><code class="language-ABAP">java.lang.NoClassDefFoundError: Could not initialize class org.xnio.conduits.Conduit
-</code></pre>
-<p>需要添加JVM启动参数：<code>-Djdk.io.File.enableADS=true</code></p>
-<h1 id="38-websocket-单元测试">38. Websocket 单元测试</h1>
-<p>SpringBootTest在启动的时候不会启动服务器，所以WebSocket自然会报错，这个时候需要添加选项webEnvironment，以便提供一个测试的web环境</p>
-<pre><code class="language-java">@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RisunApplicationTests {
-}
-</code></pre>
-<h1 id="39-svn提交强制写日志">39. SVN提交强制写日志</h1>
-<ol>
-<li>创建 pre-commit 文件</li>
-</ol>
-<pre><code class="language-bash">#!/bin/sh
-
-REPOS=&quot;$1&quot;
-TXN=&quot;$2&quot;
-SVNLOOK=/usr/bin/svnlook
-
-envSetting=&quot;env LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8&quot;
-MSG=`$envSetting $SVNLOOK log -t &quot;$TXN&quot; &quot;$REPOS&quot;`
-MSG_LEN=`python -c &quot;import sys; print len(sys.argv[1].decode(\&quot;UTF-8\&quot;))&quot; &quot;$MSG&quot;`
-
-if [ &quot;$MSG_LEN&quot; -lt 6 ];
-then
-  echo -e &quot;Commit failed: The commit description cannot be less than 6 characters!&quot; 1&gt;&amp;2
-  exit 1
-fi
-</code></pre>
-<ol start="2">
-<li>赋予执行权限</li>
-</ol>
-<pre><code>chmod +x pre-commit
-</code></pre>
-<ol start="3">
-<li>将<code>pre-commit</code>放到仓库project/hooks目录下</li>
-</ol>
-</div>
+    </code></pre>
+    <ul>
+    <li><p>配置说明</p>
+    <p>使用时只可修改下面的配置，其他的配置不要进行修改</p>
+    <ul>
+    <li><strong>Server 配置</strong></li>
+    </ul>
+    <table>
+    <thead>
+    <tr>
+    <th>配置项</th>
+    <th>配置值</th>
+    <th>说明</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+    <td>debug</td>
+    <td>true (false)，默认：true</td>
+    <td>启用调试输出</td>
+    </tr>
+    <tr>
+    <td>log_level</td>
+    <td>trace, debug, info, warning, error, fatal, or panic，默认：info</td>
+    <td>日志级别</td>
+    </tr>
+    <tr>
+    <td>http_login</td>
+    <td></td>
+    <td>认证用户名</td>
+    </tr>
+    <tr>
+    <td>http_password</td>
+    <td></td>
+    <td>认证密码</td>
+    </tr>
+    <tr>
+    <td>http_port</td>
+    <td>默认:8083（注意，要带:，例如:8000）</td>
+    <td>HTTP端口</td>
+    </tr>
+    <tr>
+    <td>webrtc_port_min</td>
+    <td>默认0，Linux环境可设置为 60000</td>
+    <td>WebRTC使用的最小端口（UDP）</td>
+    </tr>
+    <tr>
+    <td>webrtc_port_max</td>
+    <td>默认0，Linux环境可设置为 61000</td>
+    <td>WebRTC使用的最大端口（UDP）</td>
+    </tr>
+    </tbody></table>
+    <p><strong>注意：</strong> 修改<code>http_login</code>或<code>http_password</code>后，要同步修改<code>index.js</code>(位于<code>web/static/js/index.js</code>)</p>
+    <pre><code class="language-javascript">// 替换
+    xhr.setRequestHeader(&quot;Authorization&quot;, &quot;Basic &quot; + btoa(&quot;&lt;原始用户名&gt;:&lt;原始密码&gt;&quot;));
+    // 为
+    xhr.setRequestHeader(&quot;Authorization&quot;, &quot;Basic &quot; + btoa(&quot;&lt;新用户名&gt;:&lt;新密码&gt;&quot;));
+    </code></pre>
+    <ul>
+    <li><strong>Stream 配置</strong></li>
+    </ul>
+    <p>服务启动可不配置<code>streams</code>，通过平台控制台进行添加。对示例配置进行说明</p>
+    <pre><code class="language-properties">test：视频流解析标识（重要）
+    0：   视频流通道标识（重要，按顺序配置0、1、2、3、4）
+    url： RTSP地址
+    </code></pre>
+    </li>
+    <li><p>运行方式</p>
+    <ul>
+    <li>Windows：双击<code>run.exe</code></li>
+    <li>Linux：<code>./run</code></li>
+    <li>MacOS：<code>./runMac</code></li>
+    </ul>
+    <p>运行后，打开浏览器，输入地址：<code>http://&lt;ip&gt;:&lt;port&gt;</code>（本地启动的地址默认是：<a href="http://localhost:8083%EF%BC%89">http://localhost:8083）</a></p>
+    </li>
+    </ul>
+    <h3 id="3-集成web页面">3. 集成Web页面</h3>
+    <p>平台已经提供了集成Web页面的示例，详情请查看<code>examples</code>目录下的文件。</p>
+    <h3 id="4-限制">4. 限制</h3>
+    <p>支持的视频编解码器： 所有<code>H264</code>配置（不支持<code>H265</code>）</p>
+    <p>支持的音频编解码器：否</p>
+    <h2 id="三-最佳实践">三. 最佳实践</h2>
+    <table>
+    <thead>
+    <tr>
+    <th>采用技术</th>
+    <th>延迟</th>
+    <th>监控路数</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+    <td>WebRTC</td>
+    <td>&lt; 1s</td>
+    <td>不限</td>
+    </tr>
+    <tr>
+    <td>MSE</td>
+    <td>1s 左右</td>
+    <td>&lt; 6路</td>
+    </tr>
+    <tr>
+    <td>LL-HLS</td>
+    <td>2～3s</td>
+    <td>不限</td>
+    </tr>
+    <tr>
+    <td>HLS</td>
+    <td>&gt; 20s</td>
+    <td>不限</td>
+    </tr>
+    </tbody></table>
+    <h2 id="四-技术原理">四. 技术原理</h2>
+    <h3 id="1-视频监控">1. 视频监控</h3>
+    <p>监控系统中摄像头的作用是将所采集的图像数据进行编码，而硬盘录像机的作用就是对摄像头编码的数据进行解码，然后输出到显示器，这样就能看到完整
+    和清晰的监控图像。</p>
+    <ul>
+    <li>监控路数：视频监控系统里面的路数指的是你安装了多少摄像头（硬盘录像机），一般规格有4路、8路、16路和32路四种规格。</li>
+    <li>IPC：IP Camera，网络摄像头的意思</li>
+    </ul>
+    <h3 id="2-hls和ll-hls">2. HLS和LL-HLS</h3>
+    <p><strong>HLS</strong></p>
+    <blockquote>
+    <p>HLS（HTTP Live Streaming）协议是由苹果提出的基于流媒体的网络传输协议。通过将整条流切割成一个个小的可以通过 HTTP 下载的媒体文件，然后提供一个配套的媒体列表文件，
+    提供给客户端，让客户端顺序地拉取这些媒体文件播放，来实现看上去是在播放一条流的效果。由于传输层协议只需要标准的 HTTP 协议，HLS 可以方便的透过防火墙或者代理服务器，而且可以很方便的利用 CDN 进行分发加速，并且客户端实现起来也很方便。</p>
+    <p>HLS 把整个流分成一个个小的基于 HTTP 的文件来下载，每次只下载一些。HLS 协议由三部分组成：HTTP、M3U8、TS。这三部分中，HTTP 是传输协议，M3U8 是索引文件，TS 是音视频的媒体信息。</p>
+    <p>HLS的延迟：HLS的一个分片大概5-10s,一般加载3个分片播放。所以延迟大概15-30s。</p>
+    </blockquote>
+    <p><strong>LL-HLS</strong></p>
+    <blockquote>
+    <p>Low-Latency HLS。相比较于HLS，延迟更低，官方说明，最低延迟在3s左右。</p>
+    <p>更小的分片划分</p>
+    <p>LL-HLS将大的分片且分为一个个较小的分片, 这种切分方式不是简单的将源分片等分, 而是结合fMP4封装和#EXT-X-MAP规则, 将整视频的头部和内容分开, 而且内容源被划分的很细, 例如原来一个分片6s左右, 可能被切分为30个200ms的fMP4分片, 这些分片使用#EXT-X-PART来标注.</p>
+    <p>增量更新</p>
+    <p>不发送完整的播放列表，而是发送播放列表的增量（默认的播放列表被保存，然后只在出现时发送增量，而不是发送完整的播放列表）</p>
+    <p>服务器阻塞，消除轮询</p>
+    <p>服务器的责任是保留请求（阻塞），直到包含新片段的播放列表版本可用。阻断播放列表的重新加载消除了轮询</p>
+    <p>预加载支持</p>
+    <p>通过EXT-X-PRELOAD-HINT标签，来声明即将产生的片段。客户端可以提前发起请求，当该片段生成时立即回复给客户端。</p>
+    </blockquote>
+    <h3 id="3-mse">3. MSE</h3>
+    <p>MSE（Media Source Extensions）媒体源扩展 API 提供了实现无插件且基于 Web 的流媒体的功能。使用 MSE，媒体串流能够通过 JavaScript 创建， 并且能通过使用<code>&lt;audio&gt;</code>和<code>&lt;video&gt;</code>元素进行播放。</p>
+    <h3 id="4-webrtc">4. WebRTC</h3>
+    <p>WebRTC (Web Real-Time Communications)，由Google发起的实时通讯解决方案，其中包含视频音频采集，编解码，数据传输，音视频展示等功能。</p>
+    <p>参考资料：<a href="https://zhuanlan.zhihu.com/p/86751078">https://zhuanlan.zhihu.com/p/86751078</a></p>
+    <h2 id="五-常见问题">五. 常见问题</h2>
+    <ol>
+    <li><p>Linux环境无法播放WebRTC</p>
+    <p>WebRTC端口被防火墙拦截，需要进行如下操作：</p>
+    <ul>
+    <li>修改<code>config.json</code>，设置</li>
+    </ul>
+    <pre><code class="language-json"> &quot;webrtc_port_max&quot;: 61000,
+     &quot;webrtc_port_min&quot;: 60000
+    </code></pre>
+    <ul>
+    <li>服务器开放端口，在终端执行命令</li>
+    </ul>
+    <pre><code class="language-shell"> firewall-cmd --add-port=60000-61000/udp --permanent
+     firewall-cmd --reload
+    </code></pre>
+    </li>
+    </ol>
+  </div>
 </div>
 {{template "foot.tmpl" .}}
