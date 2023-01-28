@@ -1,6 +1,6 @@
 module github.com/deepch/RTSPtoWeb
 
-go 1.19
+go 1.18
 
 require (
 	github.com/deepch/vdk v0.0.19

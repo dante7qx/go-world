@@ -146,7 +146,7 @@
     <h3 id="4-限制">4. 限制</h3>
     <p>支持的视频编解码器： 所有<code>H264</code>配置（不支持<code>H265</code>）</p>
     <p>支持的音频编解码器：否</p>
-    <h2 id="三-最佳实践">三. 最佳实践</h2>
+    <h2 id="三-延时对比">三. 延时对比</h2>
     <table>
     <thead>
     <tr>
@@ -176,7 +176,36 @@
     <td>不限</td>
     </tr>
     </tbody></table>
-    <h2 id="四-技术原理">四. 技术原理</h2>
+    <h2 id="四-对接实践">四. 对接实践</h2>
+    <p>设置完视频流后，可以通过API获取对应的信息。</p>
+    <p><code>GET /stream/{STREAM_ID}/info</code></p>
+    <p>鉴权方式：Basic Auth</p>
+    <p>示例：<code>curl -u &lt;username&gt;:&lt;password&gt; http:&lt;ip&gt;:&lt;port&gt;/stream/{STREAM_ID}/info</code></p>
+    <p>响应：</p>
+    <pre><code class="language-json">{
+        &quot;status&quot;: 1,
+        &quot;payload&quot;: {
+            &quot;name&quot;: &quot;test video&quot;,
+            &quot;channels&quot;: {
+                &quot;0&quot;: {
+                    &quot;name&quot;: &quot;ch1&quot;,
+                    &quot;url&quot;: &quot;rtsp://admin:admin@{YOUR_CAMERA_IP}/uri&quot;,
+                    &quot;on_demand&quot;: true,
+                    &quot;debug&quot;: false,
+                    &quot;status&quot;: 0
+                },
+                &quot;1&quot;: {
+                    &quot;name&quot;: &quot;ch2&quot;,
+                    &quot;url&quot;: &quot;rtsp://admin:admin@{YOUR_CAMERA_IP}/uri&quot;,
+                    &quot;on_demand&quot;: true,
+                    &quot;debug&quot;: false,
+                    &quot;status&quot;: 0
+                }
+            }
+        }
+    }
+    </code></pre>
+    <h2 id="五-技术原理">五. 技术原理</h2>
     <h3 id="1-视频监控">1. 视频监控</h3>
     <p>监控系统中摄像头的作用是将所采集的图像数据进行编码，而硬盘录像机的作用就是对摄像头编码的数据进行解码，然后输出到显示器，这样就能看到完整
     和清晰的监控图像。</p>
@@ -184,7 +213,11 @@
     <li>监控路数：视频监控系统里面的路数指的是你安装了多少摄像头（硬盘录像机），一般规格有4路、8路、16路和32路四种规格。</li>
     <li>IPC：IP Camera，网络摄像头的意思</li>
     </ul>
-    <h3 id="2-hls和ll-hls">2. HLS和LL-HLS</h3>
+    <h3 id="2-rtsp协议">2. RTSP协议</h3>
+    <p>RTSP(Real Time Streaming Protocol)，实时流传输协议，是TCP/IP协议体系中的一个应用层协。RTSP可以是双向的，客户机和服务器都可以发出请求。
+    RTSP是用来控制声音或影像的多媒体串流协议，并允许同时多个串流需求控制，传输时所用的网络通讯协定并不在其定义的范围内，服务器端可以自行选择使用TCP或UDP来传送串流内容，它的语法和运作跟HTTP 1.1类似，但并不特别强调时间同步，所以比较能容忍网络延迟。</p>
+    <p>参考：<a href="https://www.jianshu.com/p/4e3925f98e84">https://www.jianshu.com/p/4e3925f98e84</a></p>
+    <h3 id="3-hls和ll-hls">3. HLS和LL-HLS</h3>
     <p><strong>HLS</strong></p>
     <blockquote>
     <p>HLS（HTTP Live Streaming）协议是由苹果提出的基于流媒体的网络传输协议。通过将整条流切割成一个个小的可以通过 HTTP 下载的媒体文件，然后提供一个配套的媒体列表文件，
@@ -204,12 +237,12 @@
     <p>预加载支持</p>
     <p>通过EXT-X-PRELOAD-HINT标签，来声明即将产生的片段。客户端可以提前发起请求，当该片段生成时立即回复给客户端。</p>
     </blockquote>
-    <h3 id="3-mse">3. MSE</h3>
+    <h3 id="4-mse">4. MSE</h3>
     <p>MSE（Media Source Extensions）媒体源扩展 API 提供了实现无插件且基于 Web 的流媒体的功能。使用 MSE，媒体串流能够通过 JavaScript 创建， 并且能通过使用<code>&lt;audio&gt;</code>和<code>&lt;video&gt;</code>元素进行播放。</p>
-    <h3 id="4-webrtc">4. WebRTC</h3>
+    <h3 id="5-webrtc">5. WebRTC</h3>
     <p>WebRTC (Web Real-Time Communications)，由Google发起的实时通讯解决方案，其中包含视频音频采集，编解码，数据传输，音视频展示等功能。</p>
     <p>参考资料：<a href="https://zhuanlan.zhihu.com/p/86751078">https://zhuanlan.zhihu.com/p/86751078</a></p>
-    <h2 id="五-常见问题">五. 常见问题</h2>
+    <h2 id="六-常见问题">六. 常见问题</h2>
     <ol>
     <li><p>Linux环境无法播放WebRTC</p>
     <p>WebRTC端口被防火墙拦截，需要进行如下操作：</p>
