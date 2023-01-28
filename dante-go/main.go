@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dante-go/_algorithm"
 	"dante-go/_db"
 	"dante-go/_file"
 	"dante-go/_json"
@@ -62,8 +63,11 @@ func main() {
 	// 调用Shell测试
 	//invokeShell()
 
+	// 算法测试
+	algorithmTest(55)
+
 	// 语法测试
-	grammarTest()
+	//grammarTest()
 }
 
 /**
@@ -283,6 +287,16 @@ func invokeShell() {
 		return
 	}
 	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
+}
+
+/**
+算法测试
+*/
+func algorithmTest(searchVal int) {
+	var sourceData = []int{100, 32, 78, 97, 21, 102, 55, 76}
+	fmt.Println(sourceData, searchVal)
+	index := _algorithm.BinarySearch(sourceData, searchVal)
+	fmt.Printf("%d 所在位置：%d", searchVal, index)
 }
 
 /**
