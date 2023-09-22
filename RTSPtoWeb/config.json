@@ -16,7 +16,7 @@
     "https_port": ":443",
     "ice_credential": "",
     "ice_servers": [
-      "stun:stun.voxgratia.org"
+      "stun:stun.l.google.com:19302"
     ],
     "ice_username": "",
     "log_level": "debug",
@@ -33,7 +33,7 @@
       "channels": {
         "0": {
           "on_demand": true,
-          "url": "rtsp://tssbwg:tssbwg@111.11.166.28:554/cam/realmonitor?channel=1&subtype=0"
+          "url": "rtsp://tssbwg:tssbwg@111.11.166.28:554/cam/realmonitor?channel=1\u0026subtype=0"
         }
       },
       "name": "伏羲庙"
@@ -46,6 +46,44 @@
         }
       },
       "name": "公司"
+    },
+    "d0a9ddef-6abf-4543-a2d9-2a0d54c26871": {
+      "channels": {
+        "0": {
+          "on_demand": true,
+          "url": "rtsp://192.168.1.101/Streaming/Channels/101"
+        },
+        "1": {
+          "on_demand": true,
+          "url": "rtsp://admin:hik12345@125.74.210.81:1554/Streaming/Channels/101"
+        },
+        "2": {
+          "on_demand": true,
+          "url": "rtsp://admin:hik12345@125.74.210.81:1554/Streaming/Channels/202"
+        }
+      },
+      "name": "麦积山游客中心"
+    },
+    "d977f9e8-cec5-4de4-a093-cb6f313f8bac": {
+      "channels": {
+        "0": {
+          "on_demand": true,
+          "url": "rtsp://admin:xmg@123456@111.21.108.6:554/unicast/c12/s0/live"
+        },
+        "1": {
+          "on_demand": true,
+          "url": "rtsp://admin:xmg@123456@111.21.108.6:554/unicast/c1/s0/live"
+        },
+        "2": {
+          "on_demand": true,
+          "url": "rtsp://admin:xmg@123456@111.21.108.6:554/unicast/c7/s0/live"
+        },
+        "3": {
+          "on_demand": true,
+          "url": "rtsp://admin:xmg@123456@111.21.108.6:554/unicast/c8/s0/live"
+        }
+      },
+      "name": "熊猫谷"
     }
   }
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSMpeg Stream Client</title>
+  <style type="text/css">
+    html, body {
+      text-align: center;
+    }
+  </style>
+
+</head>
+<body>
+<!--
+<canvas id="video-canvas"></canvas>
+-->
+<canvas id="video-canvas1" style="width: 100%; height: 70%;" ></canvas>
+
+<script type="text/javascript" src="jsmpeg.min.js"></script>
+<script type="text/javascript">
+  var request = new XMLHttpRequest();
+  // var url = "http://127.0.0.1:3000/stream/play"; //接口url
+  var url = "http://192.168.1.209:3000/stream/play"; //接口url
+  request.open("POST", url, true);
+  request.setRequestHeader("Content-type", "application/json");
+  //传入的数据，不同摄像头修改这里的rtsp地址即可
+  request.send('{"url": "rtsp://admin:risun8768@192.168.1.249:554/Streaming/Channels/101"}');
+  // request.send('{"url": "rtsp://admin:hik12345@125.74.210.81:1554/Streaming/Channels/101"}');
+  // request.send('{"url": "rtsp://admin:xmg@123456@111.21.108.6:554/unicast/c7/s0/live"}');
+  // request.send('{"url": "rtsp://admin:ztqjtsjsf689@125.74.211.35:554/Streaming/Channels/101"}');
+
+  request.onreadystatechange = function(){
+    //若响应完成且请求成功
+    if(request.readyState === 4 && request.status === 200){
+      //do something, e.g. request.responseText
+      console.log("response:"+request.responseText)
+      const resObj = JSON.parse(request.responseText);
+      if (resObj['data']) {
+        if (resObj['data']['path']) {
+          console.log("ws path:"+resObj['data']['path'])
+
+          var canvas1 = document.getElementById('video-canvas1');
+          // var wsUrl = 'ws://127.0.0.1:3000'+resObj['data']['path']
+          var wsUrl = 'ws://192.168.1.209:3000'+resObj['data']['path']
+          console.log("ws url:"+wsUrl)
+          var player = new JSMpeg.Player(wsUrl, {canvas: canvas1});
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>

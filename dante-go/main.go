@@ -2,6 +2,7 @@ package main
 
 import (
 	"dante-go/_algorithm"
+	"dante-go/_audio"
 	"dante-go/_db"
 	"dante-go/_file"
 	"dante-go/_json"
@@ -52,7 +53,7 @@ func main() {
 	//mysqlTest()
 
 	// web 测试
-	//webTest()
+	webTest()
 
 	// json 测试
 	//jsonTest()
@@ -64,13 +65,17 @@ func main() {
 	//invokeShell()
 
 	// 算法测试
-	algorithmTest(55)
+	//algorithmTest(55)
 
 	// 语法测试
 	//grammarTest()
+
+	// 音频测试
+	//audioTest()
 }
 
-/**
+/*
+*
 结构体测试
 */
 func structTest() {
@@ -79,7 +84,8 @@ func structTest() {
 	fmt.Println("你好，Go 的世界！", author1.SelfBook(address, "无字天书"))
 }
 
-/**
+/*
+*
 指针测试
 */
 func pointerTest() {
@@ -101,27 +107,29 @@ func pointerTest() {
 	//fmt.Println(obj2)
 }
 
-/**
+/*
+*
 接口测试
 */
 func interfaceTest() {
 	var phone interfaces.Phone    // 声明接口
 	iphone := interfaces.IPhone{} // 接口实现类实例化
 	phone = &iphone               // 接口实现类，接口指向引用，不是值
-	phone.Set("IPhone 8", "美国")
+	phone.Set("IPhone8", "美国")
 	str := phone.Call("13932014370")
 	fmt.Println(str)
 	fmt.Println("========================================")
 	var x interfaces.Phone = &interfaces.IPhone{}
 	x.Set("11", "333")
-	fmt.Println(x.Call("xxx"))
+	fmt.Println(x.Call("xxx-010-5873781"))
 }
 
-/**
+/*
+*
 错误接口，参考：https://blog.csdn.net/tennysonsky/article/details/78946265
-	1. error接口，它是Go语言内建的接口类型
-	2. panic
-	3. recover
+ 1. error接口，它是Go语言内建的接口类型
+ 2. panic
+ 3. recover
 */
 func errTest(a, b float64) {
 	result, err := divide(a, b)
@@ -153,7 +161,8 @@ func divide(a, b float64) (result float64, err error) {
 	return
 }
 
-/**
+/*
+*
 数组和切片Slice(无界数组)
 */
 func arrTest() {
@@ -202,10 +211,11 @@ func sliceTest() {
 	fmt.Println(copylist)
 }
 
-/**
+/*
+*
 Map
-	1. var map_variable map[key_data_type]value_data_type
-	2. map_variable := make(map[key_data_type]value_data_type)
+ 1. var map_variable map[key_data_type]value_data_type
+ 2. map_variable := make(map[key_data_type]value_data_type)
 */
 func mapTest() {
 	maps := map[string]string{"Java": "爪哇", "Pythob": "蟒蛇🐍", "Gradle": "大象🐘"}
@@ -275,7 +285,8 @@ func fileTest() {
 	_file.Mkdir("go", "aa/bb/xx")
 }
 
-/**
+/*
+*
 Go语言调用Shell与可执行文件
 */
 func invokeShell() {
@@ -289,7 +300,8 @@ func invokeShell() {
 	fmt.Printf("Execute Shell:%s finished with output:\n%s", command, string(output))
 }
 
-/**
+/*
+*
 算法测试
 */
 func algorithmTest(searchVal int) {
@@ -299,13 +311,22 @@ func algorithmTest(searchVal int) {
 	fmt.Printf("%d 所在位置：%d", searchVal, index)
 }
 
-/**
+/*
+*
 语法测试
 */
 func grammarTest() {
 	const YYYYMMDDHHMISS = "2006-01-02 10:10:10"
 	fmt.Println(time.Now().Format(YYYYMMDDHHMISS))
 
+}
+
+/*
+*
+音频测试
+*/
+func audioTest() {
+	_audio.ReadMap3()
 }
 
 /**
