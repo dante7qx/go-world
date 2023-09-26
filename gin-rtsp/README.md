@@ -29,13 +29,21 @@ $ docker run -td -p 3000:3000 ginrtsp
 **linux**
 
 ```shell
-go build -o ./bin/linux/rtsp-relay
+export CGO_ENABLED=0
+export GOOS=linux
+export GOARCH=amd64
+go build
+## go build -o ./bin/linux/rtsp-relay
 ```
 
 **windows**
 
 ```shell
-go build -o ./bin/windows/rtsp-relay.exe
+export CGO_ENABLED=1
+export GOOS=windows
+export GOARCH=amd64
+go build
+## go build -o ./bin/windows/rtsp-relay.exe
 ```
 
 ### 环境变量
@@ -67,7 +75,7 @@ POST /stream/play
 编辑`html`文件夹下view-stream.html文件，将script部分的url修改为此地址，在浏览器中打开，便可以看到视频了。
 
 ### 手动运行FFMPEG
-由于后台转换RTSP的进程在超过60秒没有请求后便会停止，也可以通过手动运行ffmpeg命令，来更方便地在测试状态下查看视频。
+由于后台转换RTSP的进程在超过30秒没有请求后便会停止，也可以通过手动运行ffmpeg命令，来更方便地在测试状态下查看视频。
 ```
 ffmpeg -rtsp_transport tcp -re -i 'rtsp://admin:password@192.168.3.10:554/cam/realmonitor?channel=1&subtype=0' -q 0 -f mpegts -c:v mpeg1video -an -s 960x540 http://127.0.0.1:3000/stream/upload/test
 ```

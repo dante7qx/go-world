@@ -2,12 +2,8 @@ package server
 
 import (
 	"ginrtsp/api"
-	"net/http"
-	"os"
-
-	"github.com/gin-contrib/cors"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // 处理跨域请求,支持options访问
@@ -34,11 +30,14 @@ func Cors() gin.HandlerFunc {
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 	// 添加跨域请求处理
-	r.Use(cors.Default())
+	/*
+		r.Use(cors.Default())
 
-	if os.Getenv("RTSP_CORS") == "true" {
-		r.Use(Cors())
-	}
+		if os.Getenv("RTSP_CORS") == "true" {
+			r.Use(Cors())
+		}
+	*/
+	r.Use(Cors())
 
 	// 路由
 	r.GET("/ping", api.Ping)
