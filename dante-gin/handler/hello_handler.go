@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"dante-gin/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"dante-gin/model"
 )
 
 func GetHello(c *gin.Context) {
@@ -26,7 +26,7 @@ func PostHello(c *gin.Context) {
 	//c.JSON(http.StatusOK, model.User{Name: name, Address: "太平桥东里17号楼", Method: "POST"})
 
 	users := []model.User{buildUser(name), buildUser(name + "_" + name)}
-	c.JSON(http.StatusOK, gin.H {
+	c.JSON(http.StatusOK, gin.H{
 		"users": users,
 		"title": "用户列表",
 	})
