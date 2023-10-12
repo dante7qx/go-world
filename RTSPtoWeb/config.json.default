@@ -15,10 +15,10 @@
     "https_key": "server.key",
     "https_port": ":443",
     "ice_servers": [
-      "stun:111.20.49.38:3478"
+      "stun:stun.l.google.com:19302"
     ],
-    "ice_username": "risun",
-    "ice_credential": "risun123",
+    "ice_username": "",
+    "ice_credential": "",
     "log_level": "debug",
     "rtsp_port": ":5541",
     "token": {

@@ -55,6 +55,7 @@ func (c *wsClient) Read() {
 
 func (c *wsClient) Write() {
 	defer func() {
+
 		c.Socket.Close()
 	}()
 
@@ -145,4 +146,9 @@ func (manager *clientManager) Groupbroadcast(group string, message []byte) {
 		Data:    message,
 	}
 	manager.broadcast <- data
+}
+
+// ClientGroupCount 返回指定clientGroup中的客户端数量
+func (manager *clientManager) ClientGroupCount(clientGroup string) int {
+	return len(manager.clientGroup[clientGroup])
 }

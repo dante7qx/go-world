@@ -48,12 +48,14 @@ func main() {
 
 	// 并发测试
 	//concurrencyTest()
+	//selectTest()
+	selectCase()
 
 	// 数据库测试
 	//mysqlTest()
 
 	// web 测试
-	webTest()
+	//webTest()
 
 	// json 测试
 	//jsonTest()
@@ -258,6 +260,25 @@ func reflectTest() {
 func concurrencyTest() {
 	//concurrencys.Count(20)
 	concurrencys.AsyncSay()
+}
+
+func selectTest() {
+	queue := make(chan int, 100)
+	go concurrencys.Producer(queue)
+	go concurrencys.Consumer(queue)
+	time.Sleep(1 * time.Second)
+}
+
+func selectCase() {
+	c := make(chan int)
+	quit := make(chan int)
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println(<-c)
+		}
+		quit <- 0
+	}()
+	concurrencys.Fibonacci(c, quit)
 }
 
 func mysqlTest() {

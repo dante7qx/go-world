@@ -61,19 +61,21 @@ func keepFFMPEG(cmd *exec.Cmd, stdin io.WriteCloser, ch *chan struct{}, playCh s
 		_ = stdin.Close()
 		util.Log().Info("Stop translate rtsp id %v", playCh)
 	}()
-
 	for {
 		select {
 		case <-*ch:
 			util.Log().Info("Reflush channel %s", playCh)
 		// 后台转换RTSP的进程在超过30秒没有请求后便会停止
 		case <-time.After(30 * time.Second):
-			_, _ = stdin.Write([]byte("q"))
-			err := cmd.Wait()
-			if err != nil {
-				util.Log().Error("Run ffmpeg err %v", err.Error())
+			count := WsManager.ClientGroupCount(playCh)
+			if count == 0 {
+				_, _ = stdin.Write([]byte("q"))
+				err := cmd.Wait()
+				if err != nil {
+					util.Log().Error("Run ffmpeg err %v", err.Error())
+				}
+				return
 			}
-			return
 		}
 	}
 }
